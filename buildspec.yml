@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - docker login -u $DOCKER_LOGIN -p $DOCKER_PSWD
+      - TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+      - echo $TAG
+      - sed -i 's@CONTAINER_IMAGE@'"ECR_REPO_URL:$TAG"'@' kube-manifest/security-demo-deployment.yml
+      - sed -i 's@SERVER_PORT@'"$SERVER_PORT"'@' kube-manifest/loadbalancer-service.yml
+      - export KUBECONFIG=$HOME/.kube/config
+  build:
+    on-failure: ABORT
+    commands:
+      - docker build --tag $ECR_REPO_URL:$TAG .
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO_URL
+      - docker push $ECR_REPO_URL:$TAG
+  post_build:
+    commands:
+      - CREDENTIALS=$(aws sts assume-role --role-arn $EKS_KUBECTL_ROLE_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
+      - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+      - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+      - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+      - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
+      - kubectl apply -f kube-manifest/

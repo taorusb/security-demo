@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: security-demo-deployment
+  labels:
+    app: security-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: security-demo
+  template:
+    metadata:
+      labels:
+        app: security-demo
+    spec:
+      containers:
+        - name: security-demo
+          image: CONTAINER_IMAGE
