@@ -7,6 +7,7 @@ phases:
       - docker login -u $DOCKER_LOGIN -p $DOCKER_PSWD
       - TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
       - echo $TAG
+      - echo $ECR_REPO_URL
       - sed -i 's@CONTAINER_IMAGE@'"ECR_REPO_URL:$TAG"'@' kube-manifest/security-demo-deployment.yml
       - sed -i 's@SERVER_PORT@'"$SERVER_PORT"'@' kube-manifest/loadbalancer-service.yml
       - export KUBECONFIG=$HOME/.kube/config
