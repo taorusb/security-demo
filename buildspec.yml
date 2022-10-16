@@ -10,6 +10,10 @@ phases:
       - echo $ECR_REPO_URL
       - sed -i 's@CONTAINER_IMAGE@'"ECR_REPO_URL:$TAG"'@' kube-manifest/security-demo-deployment.yml
       - sed -i 's@SERVER_PORT@'"$SERVER_PORT"'@' kube-manifest/loadbalancer-service.yml
+      - sed -i 's@ZOO_USER@'"$ZOO_USER"'@' kube-manifest/zookeeper.yml
+      - sed -i 's@ZOO_PASSWORD@'"$ZOO_PASSWORD"'@' kube-manifest/zookeeper.yml
+      - sed -i 's@ZOO_USER@'"$ZOO_USER"'@' kube-manifest/kafka-deployment.yml
+      - sed -i 's@ZOO_PASSWORD@'"$ZOO_PASSWORD"'@' kube-manifest/kafka-deployment.yml
       - export KUBECONFIG=$HOME/.kube/config
   build:
     on-failure: ABORT
