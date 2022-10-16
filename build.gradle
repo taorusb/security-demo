@@ -21,6 +21,7 @@ repositories {
 dependencies {
     implementation 'org.flywaydb:flyway-maven-plugin:5.2.4'
     implementation 'org.postgresql:postgresql:42.4.0'
+    implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-security'

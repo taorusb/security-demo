@@ -32,11 +32,11 @@ public class StockServiceImpl implements StockService {
 
 	@Value("${highest.value.stocks.url}")
 	public void setHIGHEST_STOCKS_URL(String HIGHEST_STOCKS_URL) {
-		this.HIGHEST_STOCKS_URL = HIGHEST_STOCKS_URL;
+		StockServiceImpl.HIGHEST_STOCKS_URL = HIGHEST_STOCKS_URL;
 	}
 
 	@Value("${changed.value.stocks.url}")
 	public void setCHANGED_VALUE_STOCKS_URL(String CHANGED_VALUE_STOCKS_URL) {
-		this.CHANGED_VALUE_STOCKS_URL = CHANGED_VALUE_STOCKS_URL;
+		StockServiceImpl.CHANGED_VALUE_STOCKS_URL = CHANGED_VALUE_STOCKS_URL;
 	}
 }
