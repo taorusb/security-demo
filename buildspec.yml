@@ -18,7 +18,7 @@ phases:
   build:
     on-failure: ABORT
     commands:
-      - docker build --tag $ECR_REPO_URL:$TAG .
+      - docker build --tag $ECR_REPO_URL:$TAG --build-arg SERVER_PORT=${SERVER_PORT} --build-arg TOP_VALUE_STOCKS_ENDPOINT=${TOP_VALUE_STOCKS_ENDPOINT} --build-arg CHANGED_VALUE_STOCKS_ENDPOINT=${CHANGED_VALUE_STOCKS_ENDPOINT} --build-arg GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} --build-arg GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} --build-arg DB_USER=${DB_USER} --build-arg DB_URL=${DB_URL} --build-arg DB_PORT=${DB_PORT} --build-arg DB_PASSWORD=${DB_PASSWORD} --build-arg DB_NAME=${DB_NAME} --build-arg DB_SCHEMA=${DB_SCHEMA} .
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO_URL
       - docker push $ECR_REPO_URL:$TAG
   post_build:
